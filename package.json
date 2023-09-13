@@ -1,0 +1,14 @@
+{
+  "name": "bun-test",
+  "module": "app.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.3"
+  }
+}
