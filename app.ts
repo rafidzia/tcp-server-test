@@ -3,9 +3,9 @@ import { randomUUID } from "crypto";
 
 let socket_list = new Map<string, Worker>()
 
-const workerURL = new URL("worker.ts", import.meta.url).href;
+// const workerURL = new URL("worker.ts", import.meta.url).href;
 
-let test: undefined = undefined
+// let test: undefined = undefined
 
 let logfile = Bun.file("log.csv")
 let logwritter = logfile.writer()
@@ -17,7 +17,7 @@ setInterval(()=>{
     let stat = heapStats()
     logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
     logwritter.flush()
-    Bun.gc(true)
+    // Bun.gc(true)
 }, 5000)
 
 Bun.listen({
@@ -28,11 +28,12 @@ Bun.listen({
             // @ts-ignore
             socket.id = randomUUID()
             // @ts-ignore
-            socket_list.set(socket.id, new Worker(workerURL))
+            // socket_list.set(socket.id, new Worker(workerURL))
         },
-        async data(socket, data) {
+        data(socket, data) {
             // @ts-ignore
-            socket_list.get(socket.id)?.postMessage(data)
+            // socket_list.get(socket.id)?.postMessage(data)
+            let datastr = Buffer.from(data).toString()
         },
         drain(socket) {
             // console.log("drain")
@@ -40,9 +41,9 @@ Bun.listen({
         close(socket) {
             // console.log("close")
             // @ts-ignore
-            socket_list.get(socket.id)?.terminate()
+            // socket_list.get(socket.id)?.terminate()
             // @ts-ignore
-            socket_list.delete(socket.id)
+            // socket_list.delete(socket.id)
         },
         error(socket, error) {
             errorwritter.write(`${error}\n`)
