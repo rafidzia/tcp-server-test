@@ -1,12 +1,14 @@
 import { heapStats } from "bun:jsc";
 import { randomUUID } from "crypto";
-import {WorkerPool} from "@rushstack/worker-pool";
+// import {WorkerPool} from "@rushstack/worker-pool";
+import wp from "workerpool"
 
-var pool = new WorkerPool({
-    id: "test",
-    workerScriptPath: "./worker.js",
-    maxWorkers: 10000,
-})
+var pool = wp.pool("./worker.js")
+// var pool = new WorkerPool({
+//     id: "test",
+//     workerScriptPath: "./worker.js",
+//     maxWorkers: 10000,
+// })
 
 // pool.checkoutWorkerAsync(true).then((worker)=>{
 //     worker.postMessage("asd")
@@ -42,14 +44,20 @@ Bun.listen({
         },
         data(socket, data) {
             // @ts-ignore
-            pool.checkoutWorkerAsync(true).then((worker)=>{
-                worker.postMessage(data)
-                // pool.checkinWorker(worker)
-                worker.once("message", (data)=>{
-                    if(data === "done"){
-                        pool.checkinWorker(worker)
-                    }
-                })
+            // pool.checkoutWorkerAsync(true).then((worker)=>{
+            //     worker.postMessage(data)
+            //     // pool.checkinWorker(worker)
+            //     worker.once("message", (data)=>{
+            //         if(data === "done"){
+            //             pool.checkinWorker(worker)
+            //         }
+            //     })
+            // })
+
+            pool.exec("test", [data]).then((result)=>{
+                // console.log(result)
+            }).catch((error)=>{
+                console.log(error)
             })
         },
         drain(socket) {

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@rushstack/worker-pool": "^0.3.37",
-    "@types/uuid": "^9.0.3"
+    "@types/uuid": "^9.0.3",
+    "@types/workerpool": "^6.4.1",
+    "workerpool": "^6.5.0"
   }
 }
