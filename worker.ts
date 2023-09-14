@@ -13,24 +13,24 @@
 //     Bun.gc(true)
 // }, 60000)
 
-// import {parentPort} from "node:worker_threads"
+import {parentPort} from "node:worker_threads"
 
-// parentPort?.once("message", (data) => {
-//     let result = Buffer.from(data).toString()
-//     parentPort?.postMessage("done")
-// })
-
-
-// setInterval(()=>{
-//     Bun.gc(false)
-// }, 1000)
-
-import wp from "workerpool"
-
-wp.worker({
-    "test": (data: string) => {
-        let result = Buffer.from(data).toString()
-        return "done"
-    }
+parentPort?.on("message", (data) => {
+    let result = Buffer.from(data).toString()
+    parentPort?.postMessage("done")
 })
+
+
+setInterval(()=>{
+    Bun.gc(false)
+}, 5000)
+
+// import wp from "workerpool"
+
+// wp.worker({
+//     "test": (data: string) => {
+//         let result = Buffer.from(data).toString()
+//         return "done"
+//     }
+// })
 

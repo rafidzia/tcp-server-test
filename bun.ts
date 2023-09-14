@@ -1,14 +1,14 @@
 import { heapStats } from "bun:jsc";
 import { randomUUID } from "crypto";
-// import {WorkerPool} from "@rushstack/worker-pool";
-import wp from "workerpool"
+import {WorkerPool} from "@rushstack/worker-pool";
+// import wp from "workerpool"
 
-var pool = wp.pool("./worker.js")
-// var pool = new WorkerPool({
-//     id: "test",
-//     workerScriptPath: "./worker.js",
-//     maxWorkers: 10000,
-// })
+// var pool = wp.pool("./worker.js")
+var pool = new WorkerPool({
+    id: "test",
+    workerScriptPath: "./worker.ts",
+    maxWorkers: 50,
+})
 
 // pool.checkoutWorkerAsync(true).then((worker)=>{
 //     worker.postMessage("asd")
@@ -25,12 +25,12 @@ var pool = wp.pool("./worker.js")
 // let errorfile = Bun.file("error.log")
 // let errorwritter = errorfile.writer()
 
-// setInterval(()=>{
+setInterval(()=>{
 //     // let stat = heapStats()
 //     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
 //     // logwritter.flush()
-//     // Bun.gc(true)
-// }, 5000)
+    Bun.gc(false)
+}, 5000)
 
 Bun.listen({
     hostname: "127.0.0.1",
@@ -44,21 +44,25 @@ Bun.listen({
         },
         data(socket, data) {
             // @ts-ignore
-            // pool.checkoutWorkerAsync(true).then((worker)=>{
-            //     worker.postMessage(data)
-            //     // pool.checkinWorker(worker)
-            //     worker.once("message", (data)=>{
-            //         if(data === "done"){
-            //             pool.checkinWorker(worker)
-            //         }
-            //     })
-            // })
-
-            pool.exec("test", [data]).then((result)=>{
-                // console.log(result)
-            }).catch((error)=>{
-                console.log(error)
+            pool.checkoutWorkerAsync(true).then((worker)=>{
+                worker.postMessage(data)
+                worker.once("message", (data)=>{
+                    if(data === "done"){
+                        pool.checkinWorker(worker)
+                    }
+                })
+                // worker.once("message", (data)=>{
+                //     if(data === "done"){
+                //         pool.checkinWorker(worker)
+                //     }
+                // })
             })
+
+            // pool.exec("test", [data]).then((result)=>{
+            //     // console.log(result)
+            // }).catch((error)=>{
+            //     console.log(error)
+            // })
         },
         drain(socket) {
             // console.log("drain")
