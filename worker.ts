@@ -22,4 +22,4 @@ parentPort?.once("message", (data) => {
 
 setInterval(()=>{
     Bun.gc(false)
-}, 5000)
+}, 1000)
