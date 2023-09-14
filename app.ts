@@ -44,7 +44,13 @@ Bun.listen({
             // @ts-ignore
             pool.checkoutWorkerAsync(true).then((worker)=>{
                 worker.postMessage(data)
-                pool.checkinWorker(worker)
+                // pool.checkinWorker(worker)
+                worker.once("message", (data)=>{
+                    console.log(data === "done")
+                    if(data === "done"){
+                        pool.checkinWorker(worker)
+                    }
+                })
             })
         },
         drain(socket) {

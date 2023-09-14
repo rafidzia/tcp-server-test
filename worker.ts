@@ -17,6 +17,7 @@ import {parentPort} from "node:worker_threads"
 
 parentPort?.once("message", (data) => {
     let result = Buffer.from(data).toString()
+    parentPort?.postMessage("done")
 })
 
 
