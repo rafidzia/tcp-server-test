@@ -7,7 +7,7 @@ import {WorkerPool} from "@rushstack/worker-pool";
 var pool = new WorkerPool({
     id: "test",
     workerScriptPath: "./worker.ts",
-    maxWorkers: 50,
+    maxWorkers: 1000,
 })
 
 // pool.checkoutWorkerAsync(true).then((worker)=>{
