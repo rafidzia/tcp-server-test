@@ -18,3 +18,8 @@ import {parentPort} from "node:worker_threads"
 parentPort?.once("message", (data) => {
     let result = Buffer.from(data).toString()
 })
+
+
+setInterval(()=>{
+    Bun.gc(false)
+}, 5000)

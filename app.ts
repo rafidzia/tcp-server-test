@@ -51,7 +51,7 @@ Bun.listen({
             // console.log("drain")
         },
         close(socket) {
-            console.log("close connection")
+            // console.log("close connection")
         },
         error(socket, error) {
             // errorwritter.write(`${error}\n`)
