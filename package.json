@@ -9,6 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@rushstack/worker-pool": "^0.3.37",
     "@types/uuid": "^9.0.3"
   }
 }

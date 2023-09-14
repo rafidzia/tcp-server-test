@@ -1,24 +1,34 @@
 import { heapStats } from "bun:jsc";
 import { randomUUID } from "crypto";
+import {WorkerPool} from "@rushstack/worker-pool";
 
-let socket_list = new Map<string, Worker>()
+var pool = new WorkerPool({
+    id: "test",
+    workerScriptPath: "./worker.js",
+    maxWorkers: 10000,
+})
+
+// pool.checkoutWorkerAsync(true).then((worker)=>{
+//     worker.postMessage("asd")
+//     pool.checkinWorker(worker)
+// })
 
 // const workerURL = new URL("worker.ts", import.meta.url).href;
 
-// let test: undefined = undefined
+// // let test: undefined = undefined
 
-let logfile = Bun.file("log.csv")
-let logwritter = logfile.writer()
+// let logfile = Bun.file("log.csv")
+// let logwritter = logfile.writer()
 
-let errorfile = Bun.file("error.log")
-let errorwritter = errorfile.writer()
+// let errorfile = Bun.file("error.log")
+// let errorwritter = errorfile.writer()
 
-setInterval(()=>{
-    let stat = heapStats()
-    logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
-    logwritter.flush()
-    // Bun.gc(true)
-}, 5000)
+// setInterval(()=>{
+//     // let stat = heapStats()
+//     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
+//     // logwritter.flush()
+//     // Bun.gc(true)
+// }, 5000)
 
 Bun.listen({
     hostname: "127.0.0.1",
@@ -28,25 +38,23 @@ Bun.listen({
             // @ts-ignore
             socket.id = randomUUID()
             // @ts-ignore
-            // socket_list.set(socket.id, new Worker(workerURL))
+
         },
         data(socket, data) {
             // @ts-ignore
-            // socket_list.get(socket.id)?.postMessage(data)
-            let datastr = Buffer.from(data).toString()
+            pool.checkoutWorkerAsync(true).then((worker)=>{
+                worker.postMessage(data)
+                pool.checkinWorker(worker)
+            })
         },
         drain(socket) {
             // console.log("drain")
         },
         close(socket) {
-            // console.log("close")
-            // @ts-ignore
-            // socket_list.get(socket.id)?.terminate()
-            // @ts-ignore
-            // socket_list.delete(socket.id)
+            console.log("close connection")
         },
         error(socket, error) {
-            errorwritter.write(`${error}\n`)
+            // errorwritter.write(`${error}\n`)
         },
     }
 });
