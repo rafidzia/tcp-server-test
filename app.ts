@@ -46,7 +46,6 @@ Bun.listen({
                 worker.postMessage(data)
                 // pool.checkinWorker(worker)
                 worker.once("message", (data)=>{
-                    console.log(data === "done")
                     if(data === "done"){
                         pool.checkinWorker(worker)
                     }
