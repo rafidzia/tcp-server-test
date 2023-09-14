@@ -5,7 +5,7 @@ const server = net.createServer((socket) => {
     // socket.id = 
     socket.on('data', (data) => {
         pool.exec("test", [data]).then((result) => {
-            console.log(result);
+            // console.log(result);
         }).catch((error) => {
             console.log(error);
         });
