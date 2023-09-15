@@ -1,36 +1,36 @@
-import { heapStats } from "bun:jsc";
+// import { heapStats } from "bun:jsc";
 import { randomUUID } from "crypto";
-import {WorkerPool} from "@rushstack/worker-pool";
-// import wp from "workerpool"
+// import {WorkerPool} from "@rushstack/worker-pool";
+// import { Subprocess } from "bun";
 
-// var pool = wp.pool("./worker.js")
-var pool = new WorkerPool({
-    id: "test",
-    workerScriptPath: "./worker.ts",
-    maxWorkers: 1000,
-})
+import {fork, ChildProcess} from "node:child_process"
 
-// pool.checkoutWorkerAsync(true).then((worker)=>{
-//     worker.postMessage("asd")
-//     pool.checkinWorker(worker)
+// var pool = new WorkerPool({
+//     id: "test",
+//     workerScriptPath: "./worker.ts",
+//     maxWorkers: 1000,
 // })
 
-// const workerURL = new URL("worker.ts", import.meta.url).href;
+//     return Bun.spawn([process.argv[0], "process.ts"], {
 
-// // let test: undefined = undefined
+//         onExit(proc, exitCode, signalCode, error) {
+//             subProcess = startSubProcess()
+//         },
+//         stdin: "pipe",
+//     })
 
-// let logfile = Bun.file("log.csv")
-// let logwritter = logfile.writer()
+let subProcess: ChildProcess
 
-// let errorfile = Bun.file("error.log")
-// let errorwritter = errorfile.writer()
+let startSubProcess = ()=>{
 
-// setInterval(()=>{
-// //     // let stat = heapStats()
-// //     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
-// //     // logwritter.flush()
-//     Bun.gc(false)
-// }, 5000)
+    const cp = fork("./process.ts")
+    cp.on("exit", (code, signal)=>{
+        subProcess = startSubProcess()
+    })
+    return cp
+}
+
+subProcess = startSubProcess()
 
 Bun.listen({
     hostname: "127.0.0.1",
@@ -42,37 +42,24 @@ Bun.listen({
             // @ts-ignore
 
         },
-        data(socket, data) {
-            // @ts-ignore
-            pool.checkoutWorkerAsync(true).then((worker)=>{
-                worker.postMessage(data)
-                worker.once("message", (result)=>{
-                    if(result === "done"){
-                        result = undefined
-                        // @ts-ignore
-                        data = undefined
-                        pool.checkinWorker(worker)
-                    }
-                })
-            })
-
-            // pool.exec("test", [data]).then((result)=>{
-            //     // console.log(result)
-            // }).catch((error)=>{
-            //     console.log(error)
+        async data(socket, data) {
+            //// @ts-ignore
+            // pool.checkoutWorkerAsync(true).then((worker)=>{
+                // worker.postMessage(data)
+                // worker.once("message", (result)=>{
+                //     if(result === "done"){
+                //         result = undefined
+                //         // @ts-ignore
+                //         data = undefined
+                //         pool.checkinWorker(worker)
+                //     }
+                // })
             // })
+            subProcess.send(data)
         },
-        drain(socket) {
-            // console.log("drain")
-        },
-        close(socket) {
-            // console.log("close connection")
-            // @ts-ignore
-            socket = undefined
-        },
-        error(socket, error) {
-            // errorwritter.write(`${error}\n`)
-        },
+        drain(socket) {},
+        close(socket) {},
+        error(socket, error) {},
     }
 });
 

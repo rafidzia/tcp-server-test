@@ -17,7 +17,7 @@ import {parentPort} from "node:worker_threads"
 
 parentPort?.on("message", (data) => {
     let result: string | undefined = Buffer.from(data).toString()
-    result = undefined
+    // result = undefined
     parentPort?.postMessage("done")
 })
 
