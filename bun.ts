@@ -25,12 +25,12 @@ var pool = new WorkerPool({
 // let errorfile = Bun.file("error.log")
 // let errorwritter = errorfile.writer()
 
-// setInterval(()=>{
-// //     // let stat = heapStats()
-// //     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
-// //     // logwritter.flush()
-//     Bun.gc(false)
-// }, 5000)
+setInterval(()=>{
+//     // let stat = heapStats()
+//     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
+//     // logwritter.flush()
+    Bun.gc(false)
+}, 5000)
 
 Bun.listen({
     hostname: "127.0.0.1",
@@ -46,16 +46,14 @@ Bun.listen({
             // @ts-ignore
             pool.checkoutWorkerAsync(true).then((worker)=>{
                 worker.postMessage(data)
-                worker.once("message", (data)=>{
-                    if(data === "done"){
+                worker.once("message", (result)=>{
+                    if(result === "done"){
+                        result = undefined
+                        // @ts-ignore
+                        data = undefined
                         pool.checkinWorker(worker)
                     }
                 })
-                // worker.once("message", (data)=>{
-                //     if(data === "done"){
-                //         pool.checkinWorker(worker)
-                //     }
-                // })
             })
 
             // pool.exec("test", [data]).then((result)=>{
@@ -69,6 +67,8 @@ Bun.listen({
         },
         close(socket) {
             // console.log("close connection")
+            // @ts-ignore
+            socket = undefined
         },
         error(socket, error) {
             // errorwritter.write(`${error}\n`)

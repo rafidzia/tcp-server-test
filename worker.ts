@@ -16,14 +16,15 @@
 import {parentPort} from "node:worker_threads"
 
 parentPort?.on("message", (data) => {
-    let result = Buffer.from(data).toString()
+    let result: string | undefined = Buffer.from(data).toString()
+    result = undefined
     parentPort?.postMessage("done")
 })
 
 
-// setInterval(()=>{
-//     Bun.gc(false)
-// }, 5000)
+setInterval(()=>{
+    Bun.gc(false)
+}, 5000)
 
 // import wp from "workerpool"
 
