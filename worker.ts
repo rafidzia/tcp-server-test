@@ -22,9 +22,9 @@ parentPort?.on("message", (data) => {
 })
 
 
-setInterval(()=>{
-    Bun.gc(false)
-}, 5000)
+// setInterval(()=>{
+//     Bun.gc(false)
+// }, 5000)
 
 // import wp from "workerpool"
 

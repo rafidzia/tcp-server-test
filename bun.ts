@@ -25,12 +25,12 @@ var pool = new WorkerPool({
 // let errorfile = Bun.file("error.log")
 // let errorwritter = errorfile.writer()
 
-setInterval(()=>{
-//     // let stat = heapStats()
-//     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
-//     // logwritter.flush()
-    Bun.gc(false)
-}, 5000)
+// setInterval(()=>{
+// //     // let stat = heapStats()
+// //     // logwritter.write(`${stat.heapSize},${stat.heapCapacity},${Date.now()}\n`)
+// //     // logwritter.flush()
+//     Bun.gc(false)
+// }, 5000)
 
 Bun.listen({
     hostname: "127.0.0.1",
