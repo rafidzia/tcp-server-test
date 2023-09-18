@@ -1,11 +1,6 @@
 import { randomUUID } from "crypto"
 import { createServer } from "net"
 
-const freeMemory = (val: any) => {
-    // @ts-ignore
-    val = null
-}
-
 const server = createServer(socket => {
     socket.on("connect", ()=>{
         // @ts-ignore
@@ -14,12 +9,15 @@ const server = createServer(socket => {
     socket.on("data", (msg) => {
         var data = msg.toString()
         data = data.replace(/\n/g, "")
-        freeMemory(data)
-        freeMemory(msg)
+        // @ts-ignore
+        data = null
+        // @ts-ignore
+        msg = null
     })
 
     socket.on("close", ()=>{
-        freeMemory(socket)
+        // @ts-ignore
+        socket = null
     })
 })
 
