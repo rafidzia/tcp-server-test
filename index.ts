@@ -7,20 +7,22 @@ const server = createServer(socket => {
         socket.id = randomUUID()
     })
     socket.on("data", (msg) => {
-        var data = msg.toString()
+        let data = msg.toString()
         data = data.replace(/\n/g, "")
         // @ts-ignore
-        data = null
+        // data = null
         // @ts-ignore
-        msg = null
+        // msg = null
     })
 
     socket.on("close", ()=>{
-        // @ts-ignore
-        socket = null
+        setTimeout(()=>{
+            // @ts-ignore
+            socket = null
+        }, 1000)
     })
 })
 
-server.listen(8080, () => {
-    console.log("server is running at port 8080")
+server.listen(8090, () => {
+    console.log("server is running at port 8090")
 })
