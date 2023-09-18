@@ -1,4 +1,4 @@
-import net from "node:net"
+import net from "net"
 
 const server = net.createServer(socket => {
     socket.on("data", (msg) => {

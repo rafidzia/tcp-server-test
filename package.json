@@ -1,7 +1,6 @@
 {
   "name": "bun-test",
   "module": "app.ts",
-  "type": "module",
   "devDependencies": {
     "bun-types": "latest"
   },
