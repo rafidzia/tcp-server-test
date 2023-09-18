@@ -10,14 +10,14 @@ const server = createServer(socket => {
         var data = msg.toString()
         data = data.replace(/\n/g, "")
         // @ts-ignore
-        data = null
+        // data = null
         // @ts-ignore
-        msg = null
+        // msg = null
     })
 
     socket.on("close", ()=>{
         // @ts-ignore
-        socket = null
+        // socket = null
     })
 })
 
