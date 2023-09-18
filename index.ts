@@ -1,8 +1,18 @@
+import { randomUUID } from "crypto"
 import {createServer} from "net"
 
 const server = createServer(socket => {
+    socket.on("connect", ()=>{
+        // @ts-ignore
+        socket.id = randomUUID()
+    })
     socket.on("data", (msg) => {
-        const data = msg.toString()
+        var data = msg.toString()
+    })
+
+    socket.on("close", ()=>{
+        // @ts-ignore
+        socket = null
     })
 })
 
