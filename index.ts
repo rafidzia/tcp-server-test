@@ -1,6 +1,6 @@
-import net from "net"
+import {createServer} from "net"
 
-const server = net.createServer(socket => {
+const server = createServer(socket => {
     socket.on("data", (msg) => {
         const data = msg.toString()
     })
