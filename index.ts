@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto"
-import {createServer} from "net"
+import { createServer } from "net"
 
 const freeMemory = (val: any) => {
     // @ts-ignore
